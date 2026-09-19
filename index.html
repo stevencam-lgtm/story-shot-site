@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story & Shot</title>
+<meta name="description" content="Landingpagina en scriptindiening voor Story & Shot, dat scripts omzet in proof-of-concept trailers voor makers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --cream:#F5F0E6; --white:#FFFFFF; --field:#EFEADD; --line:#DFD8C8;
+    --dark:#18130F; --dark-2:#211A13; --dark-line:#3A3128;
+    --ink:#1B1712; --ink-muted:#6E6759;
+    --cream-ink:#F3EDE1; --cream-muted:#A79E8C;
+    --coral:#D2896A; --coral-deep:#C67B5B; --coral-ink:#1B1712;
+    --radius:3px;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ :root{ scroll-behavior:auto; } *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+  body{ margin:0; background:var(--cream); color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  img,svg{ max-width:100%; }
+  [hidden]{ display:none !important; }
+  a{ color:inherit; }
+  h1,h2,h3,.display{ font-family:"Playfair Display",Georgia,serif; font-weight:700; margin:0; text-wrap:balance; }
+  .wrap{ max-width:1180px; margin-inline:auto; padding-inline:clamp(18px,4vw,40px); }
+  section{ padding-block:clamp(52px,8vw,96px); }
+  :focus-visible{ outline:2.5px solid var(--coral-deep); outline-offset:3px; }
+
+  .eyebrow{ font-size:.78rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--coral-deep); margin-bottom:16px; }
+  .on-dark .eyebrow{ color:var(--coral); }
+
+  /* header */
+  header{ position:sticky; top:0; z-index:40; background:var(--cream); border-bottom:1px solid var(--line); }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:16px; }
+  .brand{ font-family:"Inter",sans-serif; font-weight:800; font-size:1.2rem; text-decoration:none; letter-spacing:-.01em; }
+  .brand em{ font-style:normal; color:var(--coral-deep); }
+  nav ul{ list-style:none; display:flex; gap:26px; margin:0; padding:0; align-items:center; }
+  nav a:not(.btn){ text-decoration:none; font-size:.92rem; font-weight:500; color:var(--ink); }
+  nav a:not(.btn):hover{ color:var(--coral-deep); }
+  .lang{ display:flex; gap:4px; align-items:center; margin-left:6px; }
+  .lang span{ font-size:.78rem; font-weight:600; padding:6px 9px; border-radius:50px; color:var(--ink-muted); cursor:default; }
+  .lang span.active{ background:var(--white); border:1px solid var(--line); color:var(--ink); }
+  #nav-toggle{ display:none; }
+  .burger{ display:none; cursor:pointer; width:32px; height:32px; align-items:center; justify-content:center; }
+  .burger span, .burger span::before, .burger span::after{ content:""; display:block; width:20px; height:2px; background:var(--ink); position:relative; }
+  .burger span::before{ position:absolute; top:-6px; }
+  .burger span::after{ position:absolute; top:6px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; font-family:"Inter",sans-serif; font-size:.92rem; font-weight:600; padding:13px 24px; border-radius:var(--radius); text-decoration:none; border:1.5px solid transparent; cursor:pointer; transition:transform .12s, background .15s, border-color .15s, color .15s; }
+  .btn:active{ transform:translateY(1px); }
+  .btn-fill{ background:var(--coral); color:var(--coral-ink); }
+  .btn-fill:hover{ background:var(--coral-deep); }
+  .btn-outline{ background:transparent; color:var(--ink); border-color:var(--ink); }
+  .btn-outline:hover{ background:var(--ink); color:var(--cream); }
+  .on-dark .btn-outline{ color:var(--cream-ink); border-color:var(--cream-ink); }
+  .on-dark .btn-outline:hover{ background:var(--cream-ink); color:var(--dark); }
+  .btn-text{ background:none; border:none; padding:13px 4px; color:var(--ink); }
+  .btn-text:hover{ color:var(--coral-deep); }
+
+  /* hero */
+  #hero{ background:var(--dark); color:var(--cream-ink); }
+  .hero-grid{ display:grid; grid-template-columns:1fr 1fr; align-items:stretch; }
+  @media (max-width:880px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero-copy{ padding-block:clamp(48px,8vw,96px); padding-inline:clamp(18px,4vw,56px); max-width:640px; }
+  h1.hero-title{ font-size:clamp(2.5rem,1.9rem + 2.6vw,3.9rem); line-height:1.05; }
+  h1.hero-title .em{ display:block; font-style:italic; font-weight:600; color:var(--coral); margin-top:.12em; }
+  .hero-sub{ font-size:1.08rem; color:var(--cream-muted); max-width:46ch; margin-top:22px; }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+  .metrics{ display:flex; border-top:1px solid var(--dark-line); margin-top:52px; max-width:560px; }
+  .metric{ flex:1; padding:20px clamp(4px,2vw,20px) 4px 0; border-right:1px solid var(--dark-line); }
+  .metric:last-child{ border-right:none; padding-right:0; }
+  .metric-value{ font-family:"Playfair Display",serif; font-weight:700; font-size:clamp(1.5rem,1.3rem + .8vw,1.9rem); font-variant-numeric:tabular-nums; }
+  .metric-label{ font-size:.78rem; color:var(--cream-muted); margin-top:4px; }
+
+  .hero-visual{ position:relative; min-height:340px; overflow:hidden; background:
+      radial-gradient(circle at 78% 30%, rgba(210,137,106,.55), transparent 42%),
+      radial-gradient(circle at 55% 68%, rgba(198,123,91,.35), transparent 45%),
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,.06), transparent 40%),
+      linear-gradient(200deg, #0F0C09, #1B140D 60%, #241A10); }
+  .hero-visual svg{ position:absolute; inset:0; width:100%; height:100%; }
+  @media (max-width:880px){ .hero-visual{ min-height:260px; } }
+
+  /* section head pattern */
+  .section-head{ display:grid; grid-template-columns:minmax(260px,.85fr) 1fr; gap:clamp(24px,5vw,64px); align-items:start; }
+  @media (max-width:760px){ .section-head{ grid-template-columns:1fr; } }
+  .section-head h2{ font-size:clamp(1.7rem,1.4rem + 1.2vw,2.35rem); line-height:1.1; }
+  .section-head h2 em{ font-style:italic; color:var(--coral-deep); }
+  .on-dark .section-head h2 em{ color:var(--coral); }
+  .section-head .intro-text{ color:var(--ink-muted); font-size:1.05rem; padding-top:6px; }
+  .on-dark .section-head .intro-text{ color:var(--cream-muted); }
+
+  /* actueel / seizoensbeelden */
+  #actueel{ background:var(--cream); }
+  .season-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:36px; }
+  .season-frame{ margin:0; aspect-ratio:4/5; border-radius:var(--radius); overflow:hidden; background:
+      radial-gradient(circle at 70% 25%, rgba(210,137,106,.35), transparent 45%),
+      linear-gradient(200deg, #241A10, #18130F 65%); position:relative; }
+  .season-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .season-frame.no-image::after{
+    content:"Nog geen foto \2014 zie instructies in de broncode"; position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+    font-size:.82rem; color:var(--cream-muted); }
+
+  #waarom{ background:var(--white); border-block:1px solid var(--line); }
+
+  /* traject */
+  #traject{ background:var(--dark); color:var(--cream-ink); }
+  .steps{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); border-top:1px solid var(--dark-line); margin-top:44px; }
+  .step{ padding:26px clamp(10px,2vw,26px) 8px 0; border-right:1px solid var(--dark-line); }
+  .step:last-child{ border-right:none; }
+  @media (max-width:700px){ .step{ border-right:none; border-bottom:1px solid var(--dark-line); padding-bottom:26px; } }
+  .step-num{ font-family:"Playfair Display",serif; font-weight:700; font-size:1.05rem; color:var(--coral); }
+  .step h3{ font-size:1.15rem; margin-top:14px; font-family:"Inter",sans-serif; font-weight:700; }
+  .step p{ color:var(--cream-muted); font-size:.95rem; margin-top:8px; }
+
+  /* checklist */
+  #werk{ background:var(--white); }
+  .checklist{ display:flex; flex-direction:column; }
+  .check-item{ display:flex; gap:16px; padding:20px 0; border-top:1px solid var(--line); }
+  .check-item:last-child{ padding-bottom:0; }
+  .check-ico{ flex:none; width:24px; height:24px; margin-top:2px; color:var(--coral-deep); }
+  .check-item h3{ font-family:"Inter",sans-serif; font-size:1.05rem; font-weight:700; }
+  .check-item p{ color:var(--ink-muted); font-size:.95rem; margin:4px 0 0; }
+
+  /* afspraken */
+  #afspraken{ background:var(--white); border-top:1px solid var(--line); }
+  .deal-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); border:1px solid var(--line); border-radius:var(--radius); margin-top:44px; }
+  .deal-item{ padding:28px; border-right:1px solid var(--line); }
+  .deal-item:last-child{ border-right:none; }
+  @media (max-width:760px){ .deal-item{ border-right:none; border-bottom:1px solid var(--line); } .deal-item:last-child{ border-bottom:none; } }
+  .deal-value{ font-family:"Playfair Display",serif; font-weight:700; font-size:2.1rem; color:var(--coral-deep); }
+  .deal-label{ font-family:"Inter",sans-serif; font-weight:700; margin-top:6px; }
+  .deal-item p{ color:var(--ink-muted); font-size:.92rem; margin-top:10px; }
+  .flex-box{ background:var(--field); border-radius:var(--radius); padding:clamp(20px,4vw,32px); margin-top:28px; display:grid; grid-template-columns:minmax(180px,.7fr) 1fr; gap:20px 32px; }
+  @media (max-width:700px){ .flex-box{ grid-template-columns:1fr; } }
+  .flex-box h3{ font-family:"Inter",sans-serif; font-weight:700; font-size:1.05rem; }
+  .flex-box p{ color:var(--ink-muted); margin:0; }
+
+  /* faq */
+  #faq{ background:var(--white); border-top:1px solid var(--line); }
+  .faq-list{ border-top:1px solid var(--line); }
+  .faq-item{ border-bottom:1px solid var(--line); }
+  .faq-item summary{ list-style:none; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 2px; cursor:pointer; font-family:"Inter",sans-serif; font-weight:700; font-size:1.02rem; }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-plus{ flex:none; width:18px; height:18px; position:relative; color:var(--coral-deep); }
+  .faq-plus::before,.faq-plus::after{ content:""; position:absolute; background:currentColor; top:50%; left:50%; transform:translate(-50%,-50%); }
+  .faq-plus::before{ width:13px; height:1.5px; }
+  .faq-plus::after{ width:1.5px; height:13px; transition:transform .18s; }
+  details[open] .faq-plus::after{ transform:translate(-50%,-50%) rotate(90deg); opacity:0; }
+  .faq-item p{ padding:0 2px 22px; margin:0; max-width:64ch; color:var(--ink-muted); }
+
+  /* form */
+  #form{ background:var(--dark); color:var(--cream-ink); }
+  .form-grid{ display:grid; grid-template-columns:minmax(240px,.85fr) 1fr; gap:clamp(28px,5vw,56px); align-items:start; }
+  @media (max-width:820px){ .form-grid{ grid-template-columns:1fr; } }
+  .form-intro p{ color:var(--cream-muted); margin-top:16px; }
+  .form-intro hr{ border:none; border-top:1px solid var(--dark-line); margin:26px 0 16px; }
+  .form-intro .note{ font-size:.88rem; color:var(--cream-muted); }
+  .form-card{ background:var(--white); color:var(--ink); border-radius:var(--radius); padding:clamp(22px,4vw,34px); }
+  .f-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; }
+  @media (max-width:520px){ .f-grid{ grid-template-columns:1fr; } }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.span-2{ grid-column:1 / -1; }
+  label{ font-size:.85rem; font-weight:600; }
+  label .req{ color:var(--coral-deep); }
+  input[type=text], input[type=email], input[type=tel], select, textarea, input[type=file]{
+    font-family:"Inter",sans-serif; font-size:.96rem; color:var(--ink);
+    background:var(--field); border:1px solid var(--line); border-radius:var(--radius);
+    padding:11px 12px; width:100%;
+  }
+  textarea{ resize:vertical; font-family:"Inter",sans-serif; }
+  input:focus, select:focus, textarea:focus{ border-color:var(--coral-deep); outline:none; box-shadow:0 0 0 2.5px rgba(210,137,106,.35); }
+  .row-between{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .counter{ font-size:.74rem; color:var(--ink-muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .counter.warn{ color:var(--coral-deep); }
+  .field-hint{ font-size:.76rem; color:var(--ink-muted); }
+  .checks-agree{ display:flex; flex-direction:column; gap:13px; margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+  .agree{ display:flex; gap:11px; align-items:flex-start; font-size:.9rem; color:var(--ink-muted); }
+  .agree input{ margin-top:4px; flex:none; width:16px; height:16px; accent-color:var(--coral-deep); }
+  .form-actions{ margin-top:24px; }
+  .form-actions .btn-fill{ width:100%; justify-content:center; }
+  .copy-row{ display:flex; justify-content:center; margin-top:12px; }
+  .btn-text-sm{ background:none; border:none; padding:6px; font-family:"Inter",sans-serif; font-size:.82rem; font-weight:600; color:var(--ink-muted); text-decoration:underline; cursor:pointer; }
+  .privacy-note{ font-size:.8rem; color:var(--ink-muted); margin-top:14px; text-align:center; }
+  .confirm{ margin-top:18px; padding:16px 18px; border:1px solid var(--coral-deep); border-radius:var(--radius); background:rgba(210,137,106,.08); font-size:.92rem; }
+  .confirm strong{ display:block; margin-bottom:4px; }
+  .error-text{ color:#B23A2E; }
+
+  /* footer */
+  footer{ background:var(--cream); border-top:1px solid var(--line); padding-block:32px; }
+  .footer-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+  .footer-links{ display:flex; gap:22px; flex-wrap:wrap; font-size:.86rem; }
+  .footer-links a{ text-decoration:none; color:var(--ink-muted); }
+  .footer-links a:hover{ color:var(--ink); }
+  .copyright{ font-size:.86rem; color:var(--ink-muted); }
+
+  .footer-contact{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line); font-size:.86rem; color:var(--ink-muted); }
+  .footer-contact-label{ font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.74rem; color:var(--coral-deep); }
+  .footer-contact a{ text-decoration:none; color:var(--ink-muted); }
+  .footer-contact a:hover{ color:var(--ink); }
+  .footer-contact-sep{ color:var(--line); }
+
+  .skip-link{ position:absolute; left:-999px; top:auto; }
+  .skip-link:focus{ left:16px; top:16px; z-index:100; background:var(--coral); color:var(--coral-ink); padding:10px 14px; border-radius:var(--radius); }
+
+  @media (max-width:820px){
+    nav ul{ position:fixed; inset:60px 0 auto 0; background:var(--cream); border-bottom:1px solid var(--line);
+      flex-direction:column; align-items:flex-start; gap:0; padding:8px 0; transform:translateY(-8px); opacity:0; pointer-events:none; transition:transform .18s, opacity .18s; }
+    nav ul li{ width:100%; }
+    nav ul a{ display:block; padding:14px clamp(18px,4vw,40px); width:100%; }
+    #nav-toggle:checked ~ .nav-row nav ul{ transform:translateY(0); opacity:1; pointer-events:auto; }
+    .burger{ display:flex; }
+    .lang{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Naar de inhoud</a>
+
+<header>
+  <div class="wrap">
+    <input type="checkbox" id="nav-toggle">
+    <div class="nav-row">
+      <a class="brand" href="#hero">Story <em>&amp;</em> Shot</a>
+      <nav aria-label="Hoofdnavigatie">
+        <ul>
+          <li><a href="#traject">Het traject</a></li>
+          <li><a href="#afspraken">Afspraken</a></li>
+          <li><a href="#faq">Vragen</a></li>
+          <li><a class="btn btn-outline" href="#form">Dien je script in</a></li>
+          <li class="lang" aria-hidden="true"><span class="active">NL</span><span>FR</span><span>EN</span></li>
+        </ul>
+      </nav>
+      <label class="burger" for="nav-toggle" aria-label="Menu openen"><span></span></label>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section id="hero" class="on-dark">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Voor schrijvers, regisseurs en verhalenvertellers</div>
+        <h1 class="hero-title">Van script naar scherm.<span class="em">Wij filmen jouw droom.</span></h1>
+        <p class="hero-sub">Een sterk verhaal begint op papier. Wij helpen geselecteerde makers om het ook in beeld te laten overtuigen &mdash; met een professionele proof-of-concepttrailer die de toon, sfeer en belofte van je project zichtbaar maakt.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-fill" href="#form">Dien je project in</a>
+          <button type="button" class="btn btn-text" onclick="document.getElementById('traject').scrollIntoView({behavior:'smooth'})">Bekijk hoe het werkt &darr;</button>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-value">45&ndash;90 sec.</div>
+            <div class="metric-label">Afhankelijk van de storytelling</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">&euro;495</div>
+            <div class="metric-label">Eenmalige bijdrage</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">24 mnd.</div>
+            <div class="metric-label">Maximale optieperiode</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 600 500" preserveAspectRatio="xMidYMid slice">
+          <circle cx="460" cy="120" r="150" fill="#D2896A" opacity=".18"/>
+          <circle cx="360" cy="330" r="90" fill="#D2896A" opacity=".12"/>
+          <g transform="translate(150,180)" stroke="#EFE3D6" stroke-width="2.5" fill="none" opacity=".85">
+            <rect x="0" y="40" width="170" height="100" rx="6"/>
+            <circle cx="230" cy="90" r="55"/>
+            <circle cx="230" cy="90" r="34"/>
+            <circle cx="230" cy="90" r="14" fill="#0F0C09"/>
+            <rect x="30" y="0" width="60" height="40" rx="3"/>
+            <line x1="0" y1="140" x2="0" y2="175"/>
+            <line x1="170" y1="140" x2="170" y2="175"/>
+            <line x1="-40" y1="60" x2="0" y2="60"/>
+          </g>
+          <g stroke="#D2896A" stroke-width="1.5" opacity=".5">
+            <circle cx="90" cy="90" r="3" fill="#D2896A"/>
+            <circle cx="130" cy="60" r="2" fill="#D2896A"/>
+            <circle cx="500" cy="380" r="3" fill="#D2896A"/>
+            <circle cx="540" cy="330" r="2" fill="#D2896A"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTUEEL / seizoensbeelden — zie instructies onderaan dit blok -->
+  <!--
+    HOE ZELF EEN NIEUWE FOTO TOEVOEGEN (geen code nodig):
+    1) Geef je foto exact de naam actueel-1.jpg (of -2 / -3) en zet hem in de map "images"
+       naast dit HTML-bestand — dezelfde bestandsnaam overschrijft gewoon de vorige foto.
+    2) Pas hieronder de titel en het bijschrift aan (tussen de <h3> en <p> tags).
+    3) Sleep de site opnieuw naar Netlify (of, als je Netlify aan GitHub hebt gekoppeld,
+       commit de nieuwe foto) — de wijziging staat dan meteen live.
+    Een leeg vak (geen foto aanwezig) toont automatisch een neutrale plaatshouder,
+    dus je hoeft niet alle 3 de plekken te vullen.
+  -->
+  <section id="actueel">
+    <div class="wrap">
+      <div class="eyebrow">Actueel</div>
+      <div class="section-head">
+        <h2>Op de set deze winter.</h2>
+        <div class="intro-text">Een greep uit recente draaidagen en sfeerbeelden &mdash; wordt regelmatig ververst.</div>
+      </div>
+      <div class="season-grid">
+        <figure class="season-frame">
+          <img src="images/actueel-1.jpg" alt="Sfeerbeeld van een recente productie" loading="lazy"
+               onerror="this.closest('.season-frame').classList.add('no-image'); this.remove();">
+        </figure>
+        <figure class="season-frame">
+          <img src="images/actueel-2.jpg" alt="Sfeerbeeld van een recente productie" loading="lazy"
+               onerror="this.closest('.season-frame').classList.add('no-image'); this.remove();">
+        </figure>
+        <figure class="season-frame">
+          <img src="images/actueel-3.jpg" alt="Sfeerbeeld van een recente productie" loading="lazy"
+               onerror="this.closest('.season-frame').classList.add('no-image'); this.remove();">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAAROM BEELD -->
+  <section id="waarom">
+    <div class="wrap">
+      <div class="eyebrow">Waarom beeld?</div>
+      <div class="section-head">
+        <h2>Laat mensen niet alleen lezen wat je bedoelt. <em>Laat ze het voelen.</em></h2>
+        <div class="intro-text">
+          <p>Zenders, streamers en financiers krijgen veel projecten aangeboden. Een korte, sterke trailer kan helpen om sneller te tonen wat jouw verhaal bijzonder maakt.</p>
+          <p>Wij brengen jouw wereld tot leven met onze crew, camera, licht en montage. Niet als vervanging van een goed script, maar als overtuigend bewijs van wat er op het scherm kan ontstaan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAJECT -->
+  <section id="traject" class="on-dark">
+    <div class="wrap">
+      <div class="eyebrow">Het traject</div>
+      <div class="section-head">
+        <h2>Van inzending tot trailer</h2>
+        <div class="intro-text">Persoonlijk beoordeeld, helder afgesproken en compact geproduceerd.</div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Dien je verhaal in</h3>
+          <p>Stuur je logline, korte pitch en script of synopsis. We reageren binnen een maand.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Selectie &amp; gesprek</h3>
+          <p>Past je project bij ons? Dan bespreken we de creatieve aanpak, haalbaarheid en afspraken.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>We draaien</h3>
+          <p>Onze crew filmt op maximaal twee locaties en vertaalt jouw verhaal naar een sterke scène.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>De markt op</h3>
+          <p>Je ontvangt de trailer. Tijdens de optieperiode pitchen wij het project gericht bij mogelijke partners.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAT JE KRIJGT -->
+  <section id="werk">
+    <div class="wrap">
+      <div class="eyebrow">Wat je krijgt</div>
+      <div class="section-head">
+        <h2>Een professionele eerste stap richting het scherm.</h2>
+        <div class="checklist">
+          <div class="check-item">
+            <span class="check-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 10.5 8 15l9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><h3>Professionele productie</h3><p>Een ervaren crew, cinemacamera, licht en geluid op locatie.</p></div>
+          </div>
+          <div class="check-item">
+            <span class="check-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 10.5 8 15l9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><h3>Regie en montage</h3><p>Afgestemd op de toon, doelgroep en sfeer van jouw verhaal.</p></div>
+          </div>
+          <div class="check-item">
+            <span class="check-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 10.5 8 15l9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><h3>Trailer van 45&ndash;90 seconden</h3><p>De precieze lengte hangt af van de storytelling en wat jouw verhaal nodig heeft.</p></div>
+          </div>
+          <div class="check-item">
+            <span class="check-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 10.5 8 15l9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><h3>Actieve vertegenwoordiging</h3><p>Wij nemen het geselecteerde project mee naar relevante marktpartijen.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AFSPRAKEN -->
+  <section id="afspraken">
+    <div class="wrap">
+      <div class="eyebrow">Kosten &amp; afspraken</div>
+      <div class="section-head">
+        <h2>Duidelijk vanaf het begin</h2>
+        <div class="intro-text">Geen verrassingen. Voor we starten, weet je precies waar je aan toe bent.</div>
+      </div>
+
+      <div class="deal-grid">
+        <div class="deal-item">
+          <div class="deal-value">&euro;495</div>
+          <div class="deal-label">Eenmalige bijdrage</div>
+          <p>Bij selectie vragen we een eenmalige bijdrage van &euro;495. Dit dekt de standaardkosten voor catering, locatie en transport op de draaidag.</p>
+        </div>
+        <div class="deal-item">
+          <div class="deal-value">24</div>
+          <div class="deal-label">Maanden exclusiviteit</div>
+          <p>Bij selectie volgt een aparte optieovereenkomst. Wij krijgen maximaal 24 maanden de exclusieve mogelijkheid om je project te ontwikkelen en te pitchen.</p>
+        </div>
+        <div class="deal-item">
+          <div class="deal-value">100%</div>
+          <div class="deal-label">Jij blijft de maker</div>
+          <p>Het insturen van je project betekent géén overdracht van rechten. Komt het tot productie, dan leggen we vergoeding en exploitatierechten vooraf helder vast.</p>
+        </div>
+      </div>
+
+      <div class="flex-box">
+        <h3>Wat als jouw verhaal iets bijzonders vraagt?</h3>
+        <p>Vraagt jouw verhaal om een bijzondere locatie, speciale kostuums of andere voorzieningen? Dan zoeken we eerst samen naar een oplossing zonder extra kosten. Lukt dat niet, dan bespreken we vooraf een redelijke meerprijs die past bij de bijkomende kosten. Ga je daar niet mee akkoord, dan kun je je project kosteloos terugtrekken.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="eyebrow">Goed om te weten</div>
+      <div class="section-head">
+        <h2>Veelgestelde vragen</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Voor welke projecten kan ik inzenden?<span class="faq-plus" aria-hidden="true"></span></summary>
+            <p>Fictieprojecten met een duidelijke audiovisuele ambitie: films, series, korte films en sterke formatideeën.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Ben ik mijn rechten kwijt na het insturen?<span class="faq-plus" aria-hidden="true"></span></summary>
+            <p>Nee. Een inzending draagt geen rechten over. Alleen na selectie leggen we een exclusieve optieperiode vast.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Wat gebeurt er na 24 maanden?<span class="faq-plus" aria-hidden="true"></span></summary>
+            <p>Komt het project niet tot financiering of productie en spreken we geen verlenging af, eindigt de optieperiode.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Ben ik verplicht een eventuele meerprijs te betalen?<span class="faq-plus" aria-hidden="true"></span></summary>
+            <p>Nee. We zoeken eerst naar een oplossing binnen de standaardproductie. Een meerprijs wordt vooraf besproken.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section id="form" class="on-dark">
+    <div class="wrap">
+      <div class="form-grid">
+        <div class="form-intro">
+          <div class="eyebrow">Jouw verhaal in beeld</div>
+          <h2>Klaar om je project te laten zien?</h2>
+          <p>Vertel ons in een paar heldere zinnen wat jouw verhaal bijzonder maakt. Ons team beoordeelt iedere inzending persoonlijk.</p>
+          <hr>
+          <p class="note">Je ontvangt binnen een maand een antwoord.</p>
+        </div>
+
+        <div class="form-card">
+          <form id="pitch-form" novalidate>
+            <div class="f-grid">
+              <div class="field">
+                <label for="f-voornaam">Voornaam <span class="req">*</span></label>
+                <input type="text" id="f-voornaam" name="voornaam" required autocomplete="given-name">
+              </div>
+              <div class="field">
+                <label for="f-achternaam">Achternaam <span class="req">*</span></label>
+                <input type="text" id="f-achternaam" name="achternaam" required autocomplete="family-name">
+              </div>
+              <div class="field">
+                <label for="f-email">E-mailadres <span class="req">*</span></label>
+                <input type="email" id="f-email" name="email" required autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="f-tel">Telefoonnummer</label>
+                <input type="tel" id="f-tel" name="telefoon" autocomplete="tel">
+              </div>
+              <div class="field span-2">
+                <label for="f-genre">Genre van het project <span class="req">*</span></label>
+                <select id="f-genre" name="genre" required>
+                  <option value="" disabled selected>Kies een genre</option>
+                  <option>Drama</option>
+                  <option>Thriller</option>
+                  <option>Komedie</option>
+                  <option>Jeugd &amp; familie</option>
+                  <option>Romantiek</option>
+                  <option>Sci-fi / Fantasy</option>
+                  <option>Documentaire</option>
+                  <option>Andere</option>
+                </select>
+              </div>
+
+              <div class="field span-2">
+                <div class="row-between">
+                  <label for="f-logline">Logline <span class="req">*</span></label>
+                  <span class="counter" id="logline-counter">0 / 280 tekens</span>
+                </div>
+                <textarea id="f-logline" name="logline" rows="2" maxlength="280" required placeholder="Vat je project samen in maximaal twee scherpe zinnen."></textarea>
+              </div>
+
+              <div class="field span-2">
+                <div class="row-between">
+                  <label for="f-pitch">Korte pitch <span class="req">*</span></label>
+                  <span class="counter" id="pitch-counter">0 / 300 woorden</span>
+                </div>
+                <textarea id="f-pitch" name="pitch" rows="5" required placeholder="Waar gaat het verhaal over? Wat maakt het uniek? Voor wie is het bedoeld?"></textarea>
+              </div>
+
+              <div class="field span-2">
+                <label for="f-haalbaarheid">Haalbaarheid van de trailer <span class="req">*</span></label>
+                <textarea id="f-haalbaarheid" name="haalbaarheid" rows="3" required placeholder="Omschrijf maximaal twee locaties en de belangrijkste cast voor de trailer."></textarea>
+              </div>
+
+              <div class="field span-2">
+                <label for="f-bestand">Script of synopsis <span class="req">*</span></label>
+                <input type="file" id="f-bestand" name="bestand" accept=".pdf,.doc,.docx" required>
+                <span class="field-hint" id="file-hint">PDF, DOC of DOCX &mdash; maximaal 10 MB</span>
+              </div>
+            </div>
+
+            <div class="checks-agree">
+              <label class="agree">
+                <input type="checkbox" required>
+                Ik begrijp dat bij selectie een aparte optieovereenkomst volgt. Het insturen van mijn project betekent géén overdracht van rechten.
+              </label>
+              <label class="agree">
+                <input type="checkbox" required>
+                Ik begrijp en accepteer de eenmalige bijdrage van &euro;495 wanneer mijn project wordt geselecteerd.
+              </label>
+              <label class="agree">
+                <input type="checkbox" required>
+                Ik ga ermee akkoord dat mijn gegevens en bestand worden bewaard om mijn inzending te beoordelen.
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-fill">Verstuur mijn pitch</button>
+              <div class="copy-row">
+                <button type="button" class="btn-text-sm" id="copy-btn">of kopieer een samenvatting</button>
+              </div>
+            </div>
+            <p class="privacy-note">Je gegevens en bestand worden uitsluitend gebruikt om je inzending te beoordelen.</p>
+
+            <div class="confirm" id="confirm-box" hidden></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <a class="brand" href="#hero">Story <em>&amp;</em> Shot</a>
+    <div class="copyright">&copy; 2026 Story &amp; Shot &middot; Moving Art Production BV</div>
+    <div class="footer-links">
+      <a href="#afspraken">Afspraken</a>
+      <a href="#faq">Veelgestelde vragen</a>
+      <a href="mailto:steven.cam@belgacom.net">Beheer</a>
+    </div>
+  </div>
+  <div class="wrap footer-contact">
+    <span class="footer-contact-label">Contact</span>
+    <a href="mailto:info@storyshot.be">info@storyshot.be</a>
+    <span class="footer-contact-sep" aria-hidden="true">&middot;</span>
+    <a href="tel:+32475683621">+32 (0)475 68 36 21</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var RECIPIENT_EMAIL = "steven.cam@belgacom.net";
+
+  var loglineEl = document.getElementById('f-logline');
+  var loglineCounter = document.getElementById('logline-counter');
+  loglineEl.addEventListener('input', function(){
+    var n = loglineEl.value.length;
+    loglineCounter.textContent = n + ' / 280 tekens';
+    loglineCounter.classList.toggle('warn', n > 260);
+  });
+
+  var pitchEl = document.getElementById('f-pitch');
+  var pitchCounter = document.getElementById('pitch-counter');
+  pitchEl.addEventListener('input', function(){
+    var words = pitchEl.value.trim().length ? pitchEl.value.trim().split(/\s+/) : [];
+    var n = words.length;
+    pitchCounter.textContent = n + ' / 300 woorden';
+    pitchCounter.classList.toggle('warn', n > 300);
+  });
+
+  var fileEl = document.getElementById('f-bestand');
+  var fileHint = document.getElementById('file-hint');
+  var fileDefaultHint = fileHint.textContent;
+  fileEl.addEventListener('change', function(){
+    var f = fileEl.files && fileEl.files[0];
+    if (!f) { fileHint.textContent = fileDefaultHint; fileHint.classList.remove('error-text'); return; }
+    if (f.size > 10 * 1024 * 1024) {
+      fileHint.textContent = 'Dit bestand is groter dan 10MB. Kies een kleiner bestand.';
+      fileHint.classList.add('error-text');
+    } else {
+      fileHint.textContent = f.name + ' · ' + Math.round(f.size / 1024) + ' KB';
+      fileHint.classList.remove('error-text');
+    }
+  });
+
+  function buildSummary(){
+    var f = function(id){ return document.getElementById(id).value.trim(); };
+    var bestand = fileEl.files && fileEl.files[0] ? fileEl.files[0].name : '(geen bestand gekozen)';
+    return [
+      'Nieuwe pitch — Story & Shot',
+      '',
+      'Naam: ' + f('f-voornaam') + ' ' + f('f-achternaam'),
+      'E-mail: ' + f('f-email'),
+      'Telefoon: ' + (f('f-tel') || '-'),
+      'Genre: ' + f('f-genre'),
+      '',
+      'Logline: ' + f('f-logline'),
+      '',
+      'Pitch: ' + f('f-pitch'),
+      '',
+      'Haalbaarheid: ' + f('f-haalbaarheid'),
+      '',
+      'Script/synopsis: ' + bestand + '  (voeg dit bestand toe als bijlage aan deze e-mail)'
+    ].join('\n');
+  }
+
+  var form = document.getElementById('pitch-form');
+  var confirmBox = document.getElementById('confirm-box');
+  var submitBtn = form.querySelector('button[type=submit]');
+
+  function fallbackToMail(){
+    var summary = buildSummary();
+    var subject = 'Nieuwe pitch: ' + document.getElementById('f-logline').value.trim().slice(0, 80);
+    var mailto = 'mailto:' + encodeURIComponent(RECIPIENT_EMAIL) +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(summary);
+
+    confirmBox.hidden = false;
+    if (mailto.length < 1900) {
+      window.location.href = mailto;
+      confirmBox.innerHTML = '<strong>Je e-mailprogramma opent nu.</strong>Controleer de samenvatting, voeg je script toe als bijlage en verstuur de e-mail. Je ontvangt je dossiernummer zodra we je aanvraag verwerken. Werkt dit niet automatisch? Gebruik dan “of kopieer een samenvatting” en plak de tekst in een nieuwe e-mail naar ' + RECIPIENT_EMAIL + '.';
+    } else {
+      confirmBox.innerHTML = '<strong>Je pitch is best lang — dat is prima.</strong>Klik op “of kopieer een samenvatting” en plak de tekst in een nieuwe e-mail naar ' + RECIPIENT_EMAIL + ', met je script als bijlage.';
+    }
+    confirmBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Bezig met versturen …';
+
+    // Probeert eerst de echte backend (Netlify function op /api/submit), die het
+    // dossiernummer toekent en zowel de interne melding als de automatische
+    // ontvangstmail verstuurt vanaf info@storyshot.be. Bestaat die functie niet
+    // op deze omgeving (bv. bij het bekijken van deze pagina als Claude-artifact,
+    // of vóór de eerste deploy), dan valt het formulier terug op de e-mailoplossing.
+    var fd = new FormData(form);
+
+    fetch('/api/submit', { method: 'POST', body: fd })
+      .then(function(res){
+        if (!res.ok) throw new Error('submit failed: ' + res.status);
+        return res.json();
+      })
+      .then(function(data){
+        if (!data || !data.dossierNummer) throw new Error('geen dossiernummer ontvangen');
+        confirmBox.hidden = false;
+        confirmBox.innerHTML = '<strong>Bedankt! Je pitch is verzonden.</strong>' +
+          'Dossiernummer: <strong>' + data.dossierNummer + '</strong> — bewaar dit nummer gerust. ' +
+          'Je ontvangt binnen enkele minuten een automatische ontvangstmail op ' + document.getElementById('f-email').value.trim() + '.';
+        confirmBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        form.reset();
+        loglineCounter.textContent = '0 / 280 tekens';
+        pitchCounter.textContent = '0 / 300 woorden';
+        fileHint.textContent = fileDefaultHint;
+      })
+      .catch(function(){
+        fallbackToMail();
+      })
+      .finally(function(){
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Verstuur mijn pitch';
+      });
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', function(){
+    var summary = buildSummary();
+    var done = function(){
+      confirmBox.hidden = false;
+      confirmBox.innerHTML = '<strong>Samenvatting gekopieerd.</strong>Plak de tekst in een nieuwe e-mail naar ' + RECIPIENT_EMAIL + ' en voeg je script toe als bijlage.';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(summary).then(done, done);
+    } else {
+      done();
+    }
+  });
+})();
+</script>
+</body>
+</html>
