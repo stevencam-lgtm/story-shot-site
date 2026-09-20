@@ -11,32 +11,40 @@
 // Environment variables):
 //   RESEND_API_KEY   verplicht — API-sleutel van je Resend-account
 //   FROM_EMAIL       optioneel — standaard "Story & Shot <info@storyshot.be>"
-//   NOTIFY_EMAIL     optioneel — inbox die interne meldingen ontvangt,
-//                    standaard steven.cam@belgacom.net
+//   NOTIFY_EMAIL     optioneel — inbox(en) die interne meldingen ontvangen,
+//                    standaard steven.cam@belgacom.net. Meerdere adressen?
+//                    Scheid ze met een komma, bv.:
+//                    "steadisteven@proximus.be, moviebankproductions@gmail.com"
 //
 // Zie README.md in dit projectmapje voor de volledige installatiestappen
 // (Resend-account aanmaken, domein storyshot.be verifiëren, sleutel instellen).
- 
+
 import { getStore } from "@netlify/blobs";
- 
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || "Story & Shot <info@storyshot.be>";
-const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "steven.cam@belgacom.net";
+// NOTIFY_EMAIL mag één adres zijn, of meerdere gescheiden door een komma
+// (bv. "steadisteven@proximus.be, moviebankproductions@gmail.com") — Resend
+// verwacht een array van losse adressen, geen kommagescheiden string.
+const NOTIFY_EMAILS = (process.env.NOTIFY_EMAIL || "steven.cam@belgacom.net")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
- 
+
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   })[c]);
 }
- 
+
 function json(status, body) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { "Content-Type": "application/json" },
   });
 }
- 
+
 async function sendEmail(payload) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -52,7 +60,7 @@ async function sendEmail(payload) {
   }
   return res.json();
 }
- 
+
 // Kent een oplopend dossiernummer toe met optimistic-concurrency (onlyIfMatch/
 // onlyIfNew), zodat twee gelijktijdige inzendingen nooit hetzelfde nummer krijgen.
 async function nextDossierNummer() {
@@ -61,7 +69,7 @@ async function nextDossierNummer() {
     // getWithMetadata geeft null terug als de teller nog nooit is aangemaakt
     // (bv. bij de allereerste inzending ooit) — dat mogen we niet destructureren.
     const entry = await store.getWithMetadata("dossier", { type: "json" });
- 
+
     if (!entry) {
       const next = 1;
       const { modified } = await store.setJSON("dossier", { count: next }, { onlyIfNew: true });
@@ -70,7 +78,7 @@ async function nextDossierNummer() {
       }
       continue; // Iemand anders maakte de teller net aan — opnieuw proberen.
     }
- 
+
     const current = entry.data && typeof entry.data.count === "number" ? entry.data.count : 0;
     const next = current + 1;
     const { modified } = await store.setJSON("dossier", { count: next }, { onlyIfMatch: entry.etag });
@@ -81,7 +89,7 @@ async function nextDossierNummer() {
   }
   throw new Error("Kon geen dossiernummer toekennen na meerdere pogingen.");
 }
- 
+
 export default async (req) => {
   if (req.method !== "POST") {
     return json(405, { error: "Method not allowed" });
@@ -89,14 +97,14 @@ export default async (req) => {
   if (!RESEND_API_KEY) {
     return json(500, { error: "E-mailservice is niet geconfigureerd (RESEND_API_KEY ontbreekt)." });
   }
- 
+
   let form;
   try {
     form = await req.formData();
   } catch {
     return json(400, { error: "Kon het formulier niet lezen." });
   }
- 
+
   const get = (name) => (form.get(name) || "").toString().trim();
   const voornaam = get("voornaam");
   const achternaam = get("achternaam");
@@ -107,11 +115,11 @@ export default async (req) => {
   const pitch = get("pitch");
   const haalbaarheid = get("haalbaarheid");
   const file = form.get("bestand");
- 
+
   if (!voornaam || !achternaam || !email || !genre || !logline || !pitch || !haalbaarheid) {
     return json(400, { error: "Verplichte velden ontbreken." });
   }
- 
+
   let attachments;
   if (file && typeof file.arrayBuffer === "function" && file.size > 0) {
     if (file.size > MAX_FILE_BYTES) {
@@ -120,7 +128,7 @@ export default async (req) => {
     const buf = Buffer.from(await file.arrayBuffer());
     attachments = [{ filename: file.name || "script.pdf", content: buf.toString("base64") }];
   }
- 
+
   let dossierNummer;
   try {
     dossierNummer = await nextDossierNummer();
@@ -128,12 +136,12 @@ export default async (req) => {
     console.error(err);
     return json(500, { error: "Kon geen dossiernummer toekennen. Probeer het opnieuw." });
   }
- 
+
   try {
     // 1. Interne melding naar Story & Shot, met het script als bijlage.
     await sendEmail({
       from: FROM_EMAIL,
-      to: [NOTIFY_EMAIL],
+      to: NOTIFY_EMAILS,
       reply_to: email,
       subject: `Nieuwe pitch — dossier ${dossierNummer}`,
       html: `
@@ -153,7 +161,7 @@ export default async (req) => {
       `,
       attachments,
     });
- 
+
     // 2. Automatische ontvangstmail naar de afzender.
     await sendEmail({
       from: FROM_EMAIL,
@@ -210,10 +218,10 @@ export default async (req) => {
       dossierNummer,
     });
   }
- 
+
   return json(200, { ok: true, dossierNummer });
 };
- 
+
 export const config = {
   path: "/api/submit",
 };
