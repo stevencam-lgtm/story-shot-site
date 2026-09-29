@@ -11,6 +11,6 @@ gebruiken — een ontbrekende foto toont gewoon de bestaande plaatshouder
 foutmelding.
 
 Wil je een foto verschuiven of inzoomen nadat je ze geüpload hebt? Ga naar
-jouw-site.netlify.app/beheer.html (of storyshot.be/beheer.html), log in met
+jouw-site.netlify.app/beheer.html (of scriptandscene.be/beheer.html), log in met
 het beheerwachtwoord (ADMIN_PASSWORD, ingesteld bij Netlify → Environment
 variables), en gebruik de schuifregelaars.
