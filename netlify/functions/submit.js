@@ -3,26 +3,26 @@
 // Verwerkt een inzending van het pitchformulier:
 //  1. kent een oplopend dossiernummer toe (SS00001, SS00002, ...), opgeslagen
 //     in Netlify Blobs zodat het nummer blijft doorlopen tussen inzendingen;
-//  2. stuurt een interne meldingsmail naar Story & Shot, met het script/synopsis
+//  2. stuurt een interne meldingsmail naar Script and Scene, met het script/synopsis
 //     als bijlage;
-//  3. stuurt de automatische ontvangstmail naar de afzender, vanaf info@storyshot.be.
+//  3. stuurt de automatische ontvangstmail naar de afzender, vanaf info@scriptandscene.be.
 //
 // Vereiste omgevingsvariabelen (in te stellen via Netlify: Site settings →
 // Environment variables):
 //   RESEND_API_KEY   verplicht — API-sleutel van je Resend-account
-//   FROM_EMAIL       optioneel — standaard "Story & Shot <info@storyshot.be>"
+//   FROM_EMAIL       optioneel — standaard "Script and Scene <info@scriptandscene.be>"
 //   NOTIFY_EMAIL     optioneel — inbox(en) die interne meldingen ontvangen,
 //                    standaard steven.cam@belgacom.net. Meerdere adressen?
 //                    Scheid ze met een komma, bv.:
 //                    "steadisteven@proximus.be, moviebankproductions@gmail.com"
 //
 // Zie README.md in dit projectmapje voor de volledige installatiestappen
-// (Resend-account aanmaken, domein storyshot.be verifiëren, sleutel instellen).
+// (Resend-account aanmaken, domein scriptandscene.be verifiëren, sleutel instellen).
 
 import { getStore } from "@netlify/blobs";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || "Story & Shot <info@storyshot.be>";
+const FROM_EMAIL = process.env.FROM_EMAIL || "Script and Scene <info@scriptandscene.be>";
 // NOTIFY_EMAIL mag één adres zijn, of meerdere gescheiden door een komma
 // (bv. "steadisteven@proximus.be, moviebankproductions@gmail.com") — Resend
 // verwacht een array van losse adressen, geen kommagescheiden string.
@@ -138,7 +138,7 @@ export default async (req) => {
   }
 
   try {
-    // 1. Interne melding naar Story & Shot, met het script als bijlage.
+    // 1. Interne melding naar Script and Scene, met het script als bijlage.
     await sendEmail({
       from: FROM_EMAIL,
       to: NOTIFY_EMAILS,
@@ -170,7 +170,7 @@ export default async (req) => {
       text: [
         `Beste ${voornaam} ${achternaam},`,
         ``,
-        `Bedankt voor je bericht aan Story & Shot.`,
+        `Bedankt voor je bericht aan Script and Scene.`,
         `We hebben je aanvraag goed ontvangen en behandelen deze zo snel mogelijk.`,
         ``,
         `Dossiernummer: ${dossierNummer}`,
@@ -179,17 +179,17 @@ export default async (req) => {
         `We kijken er alvast naar uit om samen jouw verhaal te vertellen.`,
         ``,
         `Met vriendelijke groet,`,
-        `Story & Shot`,
-        `Story. Shot. AI.`,
+        `Script and Scene`,
+        `Van script naar scherm.`,
         ``,
-        `E-mail: info@storyshot.be`,
+        `E-mail: info@scriptandscene.be`,
         `Telefoon: +32 475 68 36 21`,
         `Moving Art Production BV`,
-        `© 2026 Story & Shot`,
+        `© 2026 Script and Scene`,
       ].join("\n"),
       html: `
         <p>Beste ${escapeHtml(voornaam)} ${escapeHtml(achternaam)},</p>
-        <p>Bedankt voor je bericht aan Story &amp; Shot.</p>
+        <p>Bedankt voor je bericht aan Script and Scene.</p>
         <p>We hebben je aanvraag goed ontvangen en behandelen deze zo snel mogelijk.</p>
         <p>
           <strong>Dossiernummer: ${dossierNummer}</strong><br>
@@ -198,14 +198,14 @@ export default async (req) => {
         <p>We kijken er alvast naar uit om samen jouw verhaal te vertellen.</p>
         <p>
           Met vriendelijke groet,<br>
-          Story &amp; Shot<br>
-          <em>Story. Shot. AI.</em>
+          Script and Scene<br>
+          <em>Van script naar scherm.</em>
         </p>
         <p style="font-size:13px;color:#6E6759;">
-          E-mail: <a href="mailto:info@storyshot.be">info@storyshot.be</a><br>
+          E-mail: <a href="mailto:info@scriptandscene.be">info@scriptandscene.be</a><br>
           Telefoon: +32 475 68 36 21<br>
           Moving Art Production BV<br>
-          &copy; 2026 Story &amp; Shot
+          &copy; 2026 Script and Scene
         </p>
       `,
     });
@@ -225,4 +225,3 @@ export default async (req) => {
 export const config = {
   path: "/api/submit",
 };
-
