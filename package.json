@@ -1,5 +1,5 @@
 {
-  "name": "story-shot-site",
+  "name": "script-and-scene-site",
   "private": true,
   "dependencies": {
     "@netlify/blobs": "^11.1.0"

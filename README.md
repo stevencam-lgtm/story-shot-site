@@ -1,4 +1,4 @@
-# Story & Shot — website + automatische ontvangstmail
+# Script and Scene — website + automatische ontvangstmail
 
 Dit mapje bevat de volledige site, plus een kleine "backend" (een Netlify
 function) die bij elke inzending:
@@ -7,7 +7,7 @@ function) die bij elke inzending:
 2. een **interne meldingsmail** stuurt naar jouw inbox, met het ingestuurde
    script als bijlage;
 3. de **automatische ontvangstmail** stuurt naar de afzender, vanaf
-   `info@storyshot.be`, met het dossiernummer en zijn/haar naam erin.
+   `info@scriptandscene.be`, met het dossiernummer en zijn/haar naam erin.
 
 Bekijk je de site rechtstreeks in Claude (het artifact-voorbeeld), dan werkt
 dit deel niet — daar valt het formulier automatisch terug op de
@@ -28,7 +28,7 @@ iets aanpast (tekst, foto's), hoef je niet opnieuw alles te uploaden.
 1. Maak een gratis account op [github.com](https://github.com) als je er nog
    geen hebt.
 2. Klik rechtsboven op **+** → **New repository**. Geef het een naam, bv.
-   `story-shot-site`. Laat "Public" of "Private" staan zoals je wilt. Klik
+   `script-and-scene-site`. Laat "Public" of "Private" staan zoals je wilt. Klik
    **Create repository**.
 3. Klik op **uploading an existing file** (of **Add file → Upload files**).
 4. Sleep **alle bestanden en mapjes uit dit pakket** naar dat venster
@@ -46,7 +46,7 @@ iets aanpast (tekst, foto's), hoef je niet opnieuw alles te uploaden.
    (build command leeg laten, publish directory `.`) — dat staat al correct
    in `netlify.toml`. Klik **Deploy**.
 5. Na een minuutje krijg je een live link, iets als
-   `story-shot-site.netlify.app`. Wil je je eigen domein (storyshot.be)?
+   `script-and-scene-site.netlify.app`. Wil je je eigen domein (scriptandscene.be)?
    Ga dan naar **Domain settings → Add a domain** en volg de instructies.
 
 Zonder de volgende stap werkt de site al perfect, alleen zonder automatische
@@ -55,14 +55,14 @@ e-mails (het formulier valt dan terug op de mail/kopieer-oplossing).
 ## Stap 3 — Automatische e-mails inschakelen via Resend
 
 We gebruiken [Resend](https://resend.com) om e-mails te versturen vanaf
-`info@storyshot.be`. Resend heeft een gratis laag die ruim voldoende is voor
+`info@scriptandscene.be`. Resend heeft een gratis laag die ruim voldoende is voor
 een pitchformulier.
 
 1. Maak een gratis account op [resend.com](https://resend.com).
-2. Ga naar **Domains → Add Domain** en voer `storyshot.be` in.
+2. Ga naar **Domains → Add Domain** en voer `scriptandscene.be` in.
 3. Resend toont een paar DNS-records (meestal 2 à 3: een SPF/TXT-record en
    een of meer DKIM/CNAME-records). Voeg die toe bij je domeinregistrar
-   (waar je storyshot.be beheert — vraag het gerust als je niet weet waar
+   (waar je scriptandscene.be beheert — vraag het gerust als je niet weet waar
    dat is, dat vind je meestal terug in de bevestigingsmail van je
    domeinaankoop).
 4. Wacht tot Resend het domein als "Verified" toont (kan tot een paar uur
@@ -74,7 +74,7 @@ een pitchformulier.
    - `RESEND_API_KEY` = de sleutel die je net kopieerde
    - (optioneel) `NOTIFY_EMAIL` = het e-mailadres waarop jij de interne
      melding van elke inzending wilt ontvangen. Standaard staat dit op
-     `steven.cam@belgacom.net` — verander dit zodra `info@storyshot.be`
+     `steven.cam@belgacom.net` — verander dit zodra `info@scriptandscene.be`
      een echte, door jou gelezen inbox is.
 7. Ga naar **Deploys** en klik **Trigger deploy → Deploy site**, zodat de
    nieuwe instellingen actief worden.
