@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bekijk de video — Script and Scene</title>
+<meta name="description" content="Een voorbeeld van een proof-of-concept trailer van Script and Scene: van script naar scherm in 45-90 seconden.">
+<link rel="canonical" href="https://scriptandscene.be/trailer.html">
+<meta property="og:type" content="video.other">
+<meta property="og:url" content="https://scriptandscene.be/trailer.html">
+<meta property="og:site_name" content="Script and Scene">
+<meta property="og:title" content="Bekijk de video — Script and Scene">
+<meta property="og:description" content="Een voorbeeld van een proof-of-concept trailer van Script and Scene.">
+<meta property="og:image" content="https://scriptandscene.be/poster.jpg">
+<meta property="og:locale" content="nl_BE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --cream:#F5F0E6; --white:#FFFFFF; --field:#EFEADD; --line:#DFD8C8;
+    --dark:#18130F; --dark-2:#211A13; --dark-line:#3A3128;
+    --ink:#1B1712; --ink-muted:#6E6759;
+    --cream-ink:#F3EDE1; --cream-muted:#A79E8C;
+    --coral:#D2896A; --coral-deep:#C67B5B; --coral-ink:#1B1712;
+    --radius:3px;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ :root{ scroll-behavior:auto; } *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+  body{ margin:0; background:var(--cream); color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  img,svg{ max-width:100%; }
+  a{ color:inherit; }
+  h1,h2,.display{ font-family:"Playfair Display",Georgia,serif; font-weight:700; margin:0; text-wrap:balance; }
+  .wrap{ max-width:1180px; margin-inline:auto; padding-inline:clamp(18px,4vw,40px); }
+  :focus-visible{ outline:2.5px solid var(--coral-deep); outline-offset:3px; }
+  .eyebrow{ font-size:.78rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--coral); margin-bottom:16px; }
+
+  header{ background:var(--cream); border-bottom:1px solid var(--line); }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:16px; }
+  .brand{ font-family:"Inter",sans-serif; font-weight:800; font-size:1.2rem; text-decoration:none; letter-spacing:-.01em; }
+  .brand em{ font-style:normal; color:var(--coral-deep); }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; font-family:"Inter",sans-serif; font-size:.92rem; font-weight:600; padding:13px 24px; border-radius:var(--radius); text-decoration:none; border:1.5px solid transparent; cursor:pointer; transition:transform .12s, background .15s, border-color .15s, color .15s; }
+  .btn:active{ transform:translateY(1px); }
+  .btn-fill{ background:var(--coral); color:var(--coral-ink); }
+  .btn-fill:hover{ background:var(--coral-deep); }
+  .btn-outline{ background:transparent; color:var(--cream-ink); border-color:var(--cream-ink); }
+  .btn-outline:hover{ background:var(--cream-ink); color:var(--dark); }
+
+  #stage{ background:var(--dark); color:var(--cream-ink); padding-block:clamp(48px,8vw,88px); }
+  .stage-grid{ max-width:900px; margin-inline:auto; text-align:center; }
+  .stage-copy{ max-width:640px; margin-inline:auto; }
+  h1.stage-title{ font-size:clamp(2.1rem,1.7rem + 1.8vw,3.1rem); line-height:1.1; }
+  h1.stage-title em{ font-style:italic; font-weight:600; color:var(--coral); }
+  .stage-sub{ font-size:1.05rem; color:var(--cream-muted); max-width:46ch; margin:20px auto 0; }
+  .stage-ctas{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:30px; }
+  .meta-row{ display:flex; justify-content:center; gap:28px; margin-top:44px; padding-top:24px; border-top:1px solid var(--dark-line); flex-wrap:wrap; }
+  .meta-item .v{ font-family:"Playfair Display",serif; font-weight:700; font-size:1.35rem; }
+  .meta-item .l{ font-size:.78rem; color:var(--cream-muted); margin-top:3px; }
+
+  .player-wrap{ display:flex; justify-content:center; margin-top:48px; }
+  .player{ position:relative; width:100%; max-width:900px; aspect-ratio:16/9; border-radius:10px; overflow:hidden;
+    background:#000; box-shadow:0 30px 70px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06); }
+  .player video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  #next{ background:var(--white); border-top:1px solid var(--line); padding-block:clamp(52px,8vw,88px); }
+  .next-grid{ display:grid; grid-template-columns:minmax(260px,.85fr) 1fr; gap:clamp(24px,5vw,64px); align-items:start; }
+  @media (max-width:760px){ .next-grid{ grid-template-columns:1fr; } }
+  .next-grid h2{ font-size:clamp(1.6rem,1.3rem + 1.1vw,2.2rem); line-height:1.1; }
+  .next-grid h2 em{ font-style:italic; color:var(--coral-deep); }
+  .next-grid p{ color:var(--ink-muted); font-size:1.02rem; margin-top:14px; max-width:50ch; }
+  .next-ctas{ margin-top:26px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-dark{ background:var(--ink); color:var(--cream); }
+  .btn-dark:hover{ background:#000; }
+
+  footer{ background:var(--cream); border-top:1px solid var(--line); padding-block:32px; }
+  .footer-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+  .footer-links{ display:flex; gap:22px; flex-wrap:wrap; font-size:.86rem; }
+  .footer-links a{ text-decoration:none; color:var(--ink-muted); }
+  .footer-links a:hover{ color:var(--ink); }
+  .copyright{ font-size:.86rem; color:var(--ink-muted); }
+  .footer-contact{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line); font-size:.86rem; color:var(--ink-muted); }
+  .footer-contact-label{ font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.74rem; color:var(--coral-deep); }
+  .footer-contact a{ text-decoration:none; color:var(--ink-muted); }
+  .footer-contact a:hover{ color:var(--ink); }
+  .footer-contact-sep{ color:var(--line); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <a class="brand" href="/">Script <em>and</em> Scene</a>
+    <a class="btn btn-fill" href="/#form">Dien je project in</a>
+  </div>
+</header>
+
+<main>
+  <section id="stage">
+    <div class="wrap stage-grid">
+      <div class="stage-copy">
+        <div class="eyebrow">Voorbeeld</div>
+        <h1 class="stage-title">Dit is wat wij maken<br><em>van jouw verhaal.</em></h1>
+        <p class="stage-sub">Een korte, filmische proof-of-concept trailer &mdash; de wereld, de sfeer, de personages en de spanning van een project, zichtbaar gemaakt in minder dan een minuut.</p>
+        <div class="stage-ctas">
+          <a class="btn btn-fill" href="/#form">Dien je project in</a>
+          <a class="btn btn-outline" href="/">&larr; Terug naar scriptandscene.be</a>
+        </div>
+        <div class="meta-row">
+          <div class="meta-item"><div class="v">45&ndash;90 sec.</div><div class="l">Lengte van de trailer</div></div>
+          <div class="meta-item"><div class="v">&euro;495</div><div class="l">Vanaf, per project</div></div>
+          <div class="meta-item"><div class="v">24 mnd.</div><div class="l">Optieperiode</div></div>
+        </div>
+      </div>
+      <div class="player-wrap">
+        <div class="player">
+          <video src="trailer.mp4" poster="poster.jpg" controls playsinline preload="metadata" aria-label="Script and Scene voorbeeldtrailer"></video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="wrap next-grid">
+      <div>
+        <h2>Heb jij ook een <em>script dat dit verdient?</em></h2>
+      </div>
+      <div>
+        <p>Dan horen we graag van je. We zoeken momenteel makers met interessante projecten om dit traject mee op te bouwen &mdash; misschien kunnen we samen die eerste sc&egrave;ne maken.</p>
+        <div class="next-ctas">
+          <a class="btn btn-dark" href="/#form">Dien je project in</a>
+          <a class="btn btn-outline" style="color:var(--ink); border-color:var(--ink);" href="mailto:info@scriptandscene.be">info@scriptandscene.be</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <a class="brand" href="/">Script <em>and</em> Scene</a>
+    <div class="copyright">&copy; 2026 Script and Scene &middot; a brand of Movie Bank Productions BV &amp; Moving Art Production BV</div>
+    <div class="footer-links">
+      <a href="/#afspraken">Afspraken</a>
+      <a href="/#faq">Veelgestelde vragen</a>
+    </div>
+  </div>
+  <div class="wrap footer-contact">
+    <span class="footer-contact-label">Contact</span>
+    <a href="mailto:info@scriptandscene.be">info@scriptandscene.be</a>
+    <span class="footer-contact-sep" aria-hidden="true">&middot;</span>
+    <a href="tel:+32489660025">+32 (0)489 66 00 25</a>
+    <span class="footer-contact-sep" aria-hidden="true">/</span>
+    <a href="tel:+32475683621">+32 (0)475 68 36 21</a>
+  </div>
+</footer>
+
+</body>
+</html>
